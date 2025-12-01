@@ -11,8 +11,7 @@ RUN apk add --no-cache \
     zip \
     unzip \
     git \
-    sqlite \
-    sqlite-dev \
+    postgresql-dev \
     oniguruma-dev \
     libxml2-dev
 
@@ -21,7 +20,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo \
         pdo_mysql \
-        pdo_sqlite \
+        pdo_pgsql \
         mbstring \
         exif \
         pcntl \
