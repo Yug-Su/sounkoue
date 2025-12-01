@@ -7,15 +7,14 @@ fi
 
 php artisan key:generate --force
 
-# Wait for database to be ready
-echo "Waiting for database connection..."
-until php artisan migrate:status > /dev/null 2>&1; do
-    echo "Database not ready, waiting..."
-    sleep 2
-done
-
-# Run migrations
-php artisan migrate --force
+# Test database connection with timeout
+echo "Testing database connection..."
+if timeout 30 php artisan migrate:status > /dev/null 2>&1; then
+    echo "Database connected, running migrations..."
+    php artisan migrate --force
+else
+    echo "Database connection failed, skipping migrations for now"
+fi
 
 # Cache config and routes
 php artisan config:cache

@@ -13,7 +13,8 @@ RUN apk add --no-cache \
     git \
     postgresql-dev \
     oniguruma-dev \
-    libxml2-dev
+    libxml2-dev \
+    coreutils
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
