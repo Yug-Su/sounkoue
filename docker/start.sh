@@ -10,16 +10,24 @@ fi
 # Generate app key if not exists
 php artisan key:generate --force
 
+# Debug database connection
+echo "=== Database Debug Info ==="
+php debug-db.php
+
 # Wait for database with retries
-echo "Waiting for database connection..."
-for i in $(seq 1 30); do
+echo "\nWaiting for database connection..."
+for i in $(seq 1 5); do
     if php artisan migrate:status > /dev/null 2>&1; then
         echo "Database connected successfully!"
         php artisan migrate --force
         break
     else
-        echo "Attempt $i: Database not ready, waiting 2 seconds..."
-        sleep 2
+        echo "Attempt $i: Database not ready, waiting 5 seconds..."
+        if [ $i -eq 1 ]; then
+            echo "First attempt failed, showing debug info:"
+            php artisan migrate:status || true
+        fi
+        sleep 5
     fi
 done
 
