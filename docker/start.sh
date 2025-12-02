@@ -1,20 +1,27 @@
 #!/bin/sh
 
-# Generate app key if not exists
-if [ ! -f .env ]; then
+# Use production env if exists, otherwise use example
+if [ -f .env.production ]; then
+    cp .env.production .env
+elif [ ! -f .env ]; then
     cp .env.example .env
 fi
 
+# Generate app key if not exists
 php artisan key:generate --force
 
-# Test database connection with timeout
-echo "Testing database connection..."
-if timeout 30 php artisan migrate:status > /dev/null 2>&1; then
-    echo "Database connected, running migrations..."
-    php artisan migrate --force
-else
-    echo "Database connection failed, skipping migrations for now"
-fi
+# Wait for database with retries
+echo "Waiting for database connection..."
+for i in $(seq 1 30); do
+    if php artisan migrate:status > /dev/null 2>&1; then
+        echo "Database connected successfully!"
+        php artisan migrate --force
+        break
+    else
+        echo "Attempt $i: Database not ready, waiting 2 seconds..."
+        sleep 2
+    fi
+done
 
 # Cache config and routes
 php artisan config:cache
