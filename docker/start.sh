@@ -3,9 +3,16 @@
 # Use production env if exists, otherwise use example
 if [ -f .env.production ]; then
     cp .env.production .env
+    echo "Using .env.production"
 elif [ ! -f .env ]; then
     cp .env.example .env
+    echo "Using .env.example"
 fi
+
+# Load environment variables
+set -a
+[ -f .env ] && . .env
+set +a
 
 # Generate app key if not exists
 php artisan key:generate --force

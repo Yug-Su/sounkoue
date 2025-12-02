@@ -4,8 +4,12 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     envVars:
+      - key: APP_NAME
+        value: "Soun Kouê"
       - key: APP_ENV
         value: production
+      - key: APP_KEY
+        value: base64:Nl9Wn4qCmGk0T5exai8oX6CT+mhTf+wNSrAOAF+STek=
       - key: APP_DEBUG
         value: false
       - key: APP_URL
@@ -26,9 +30,11 @@ services:
         value: require
       - key: SESSION_DRIVER
         value: file
-      - key: CACHE_STORE
+      - key: CACHE_DRIVER
         value: file
       - key: QUEUE_CONNECTION
         value: sync
       - key: LOG_CHANNEL
-        value: stderr
+        value: stack
+      - key: LOG_LEVEL
+        value: error
