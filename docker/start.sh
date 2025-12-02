@@ -9,10 +9,6 @@ fi
 # Generate app key if not exists
 php artisan key:generate --force
 
-# Debug database connection
-echo "=== Database Debug Info ==="
-php debug-db.php
-
 # Create migrations table and run migrations
 echo "\nSetting up database..."
 php artisan migrate:install --force
